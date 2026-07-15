@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHILOH WANG | Personal Portfolio</title>
+    <!-- 引入高质感设计师字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- 引入 GSAP 核心库及滚动插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        /* --- 全局高级静奢风样式规范 --- */
+        :root {
+            --bg-color: #FBFBFA; 
+            --text-dark: #121212; 
+            --text-muted: #666666;
+            --accent-blue: #3A6082; /* 高定深邃蝶翅蓝 */
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        h1, h2, h3, h4, .serif-text {
+            font-family: var(--font-serif);
+            font-weight: 400;
+        }
+
+        .line-divider {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(18, 18, 18, 0.08);
+            margin: 40px 0;
+        }
+
+        /* 文案中突出的大数字样式 */
+        .highlight-num {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin: 0 4px;
+            vertical-align: baseline;
+        }
+
+        /* 二八法则：高级静奢风微噪点纸张滤镜 */
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.04; 
+            pointer-events: none; 
+            z-index: 9999;
+        }
+
+        /* --- Section 1: Hero Scene --- */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8vw;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            width: 100%;
+            gap: 4vw;
+            align-items: center;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 7vw, 6.5rem);
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-manifesto {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+            color: var(--text-dark);
+            line-height: 1.3;
+            margin-bottom: 3rem;
+            max-width: 85%;
+        }
+
+        .hero-tags {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag-item {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(18, 18, 18, 0.2);
+            padding-bottom: 4px;
+        }
+
+        .hero-right {
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* 二八法则：初始设为纯黑白，依靠滚入激活色彩 */
+        .hero-img-wrapper {
+            width: 85%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            clip-path: inset(100% 0 0 0);
+        }
+
+        .hero-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .hero-img-wrapper:hover img {
+            transform: scale(1.04);
+        }
+
+        /* --- Section 2: About Me --- */
+        .about-section {
+            min-height: 110vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 8vw;
+            background-color: var(--bg-color);
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 680px; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            opacity: 0;
+            filter: blur(8px);
+        }
+
+        .about-title {
+            font-size: 3rem;
+            letter-spacing: 0.01em;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .about-title-line {
+            width: 70px;
+            height: 1px;
+            background-color: var(--text-dark);
+            margin-bottom: 45px;
+        }
+
+        .about-statement {
+            font-size: clamp(1.1rem, 1.35vw, 1.3rem); 
+            line-height: 1.85; 
+            letter-spacing: 0.03em;
+            text-align: justify;
+            color: var(--text-dark);
+        }
+
+        /* --- Section 2.5: Education Background --- */
+        .edu-section {
+            min-height: 80vh;
+            padding: 12vh 8vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+        }
+
+        .edu-card {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .edu-school {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .edu-degree {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-time {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .edu-courses-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .edu-courses {
+            font-size: 0.95rem;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 1.5rem;
+        }
+
+        .edu-honor {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            border-left: 2px solid var(--accent-blue);
+            padding-left: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* --- Section 3: Curated Projects --- */
+        .project-chapter-title {
+            padding: 12vh 8vw 4vh 8vw;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            letter-spacing: -0.02em;
+            background-color: var(--bg-color);
+        }
+
+        /* Chapter 01 */
+        .chapter-pr {
+            padding: 0 8vw 12vh 8vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+        }
+
+        .pr-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .gallery-img-box {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 二八法则：初始为黑白 */
+        .gallery-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-img-box:hover img {
+            transform: scale(1.04);
+        }
+
+        .img-tall { aspect-ratio: 3/4; }
+        .img-wide { grid-column: span 2; aspect-ratio: 16/10; }
+
+        .pr-content-sticky {
+            position: sticky;
+            top: 15vh;
+            height: fit-content;
+        }
+
+        .project-role {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .project-company {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-details {
+            font-size: 0.95rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .project-details p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+
+        /* Chapter 02 (高级珠宝质感铺底重构) */
+        .chapter-strategy {
+            padding: 12vh 8vw 15vh 8vw;
+            background-color: #121212;
+            color: #FBFBFA;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 破局逻辑：跳出简约留白，注入45%透明度暗色珠宝首饰图像背景层 */
+        .jewelry-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('jewelry_bg.jpg'); /* 请在此处替换你的首饰质感图文件名，如没有，会优雅降级为纯黑纯粹艺术感 */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.45; /* 45% 透明度铺底 */
+            mix-blend-mode: luminosity; /* 融入高级黑色调中，防止抢戏 */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 6vw;
+            align-items: center;
+            position: relative;
+            z-index: 2; /* 确保内容在铺底图片之上 */
+        }
+
+        .counter-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .counter-item {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .counter-num {
+            font-family: var(--font-serif);
+            font-size: 6.5rem;
+            line-height: 1;
+            color: var(--accent-blue);
+            margin-right: 1rem;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+        }
+
+        .strategy-text h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #FBFBFA;
+        }
+
+        .strategy-list {
+            list-style: none;
+        }
+
+        .strategy-list li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0;
+        }
+
+        .strategy-list li:last-child { border: none; }
+
+        .strat-meta {
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .strat-title {
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .strat-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+            text-align: justify;
+        }
+
+        /* Chapter 03 (横向滑动) */
+        .horizontal-scroll-container {
+            position: relative;
+            width: 100%;
+            background-color: var(--bg-color);
+            overflow: hidden;
+        }
+
+        .scroll-wrapper {
+            display: flex;
+            width: 400vw;
+            height: 100vh;
+        }
+
+        .panel {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 8vw;
+        }
+
+        .panel-intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+            width: 100%;
+        }
+
+        .panel-intro-text h3 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .panel-design-sketch {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2vw;
+            width: 100%;
+            align-items: center;
+        }
+
+        .sketch-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sketch-img-wrapper {
+            width: 100%;
+            aspect-ratio: 1/1.4;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        .sketch-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sketch-caption {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .panel-stage {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 5vw;
+            width: 100%;
+            align-items: center;
+        }
+
+        .stage-img-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .stage-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .stage-text h4 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .panel-uts {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 5vw;
+            width: 100%;
+            align-items: center;
+        }
+
+        /* --- Section 3.5: Creative Toolbox --- */
+        .toolbox-section {
+            min-height: 60vh;
+            padding: 12vh 8vw;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .toolbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            max-width: 80%;
+            margin-top: 2rem;
+        }
+
+        .tool-tag {
+            font-size: 1.1rem;
+            padding: 0.8rem 2rem;
+            border: 1px solid rgba(12, 12, 12, 0.15);
+            background-color: transparent;
+            cursor: default;
+            transition: border-color 0.4s, color 0.4s;
+            display: inline-block;
+        }
+
+        /* --- Section 4: Human-Centric Footprints --- */
+        .human-section {
+            padding: 15vh 8vw;
+            background-color: var(--bg-color);
+        }
+
+        .human-quote {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            line-height: 1.4;
+            text-align: center;
+            max-width: 75%;
+            margin: 0 auto 5rem auto;
+            color: var(--text-dark);
+        }
+
+        .human-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+        }
+
+        .human-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .human-meta {
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        /* --- Section 5: Connect (双层字号二八法则动效) --- */
+        .connect-section {
+            min-height: 85vh;
+            padding: 12vh 8vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: var(--bg-color);
+        }
+
+        .connect-huge-group {
+            margin-top: 5vh;
+            max-width: 85%;
+        }
+
+        /* 二八法则：初始设为电影感雾化隐匿状态 */
+        .connect-main-zh {
+            font-size: clamp(2rem, 4.5vw, 3.8rem);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(20px);
+        }
+
+        .connect-sub-en {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            line-height: 1.3;
+            letter-spacing: 0.03em;
+            color: var(--text-muted);
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(20px);
+        }
+
+        .connect-links {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 5vh;
+            flex-wrap: wrap;
+        }
+
+        .connect-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .connect-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .connect-anchor {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .connect-anchor::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--text-dark);
+            transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .connect-anchor:hover::after {
+            width: 100%;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 992px) {
+            .hero-grid, .edu-grid, .chapter-pr, .strategy-grid, .panel-intro-grid, .panel-stage, .panel-uts, .human-grid {
+                grid-template-columns: 1fr !important;
+                gap: 3rem !important;
+            }
+            .hero-right { justify-content: flex-start; }
+            .hero-img-wrapper { width: 100%; }
+            .pr-content-sticky { position: relative; top: 0; }
+            .scroll-wrapper { display: block; width: 100%; height: auto; }
+            .panel { width: 100vw; height: auto; min-height: 100vh; padding: 8vh 8vw; }
+            .panel-design-sketch { grid-template-columns: 1fr; gap: 3rem; }
+            .about-section { padding: 0 8vw; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 微噪点质张滤镜 -->
+    <div class="grain-overlay"></div>
+
+    <!-- SECTION 1: HERO SCENE -->
+    <section class="hero-section">
+        <div class="hero-grid">
+            <div class="hero-left">
+                <h1 class="hero-title">SHILOH WANG<br><span style="font-family: var(--font-serif); font-weight:300; font-style:italic;">王思淇</span></h1>
+                <p class="hero-manifesto">"Where Fashion Narrative Meets Strategic Insight."</p>
+                <div class="hero-tags">
+                    <span class="tag-item">Fashion Editorial</span>
+                    <span class="tag-item">Creative Planning</span>
+                    <span class="tag-item">Brand Storytelling</span>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-img-wrapper">
+                    <img src="p10.jpg" alt="Shiloh Wang Profile">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ABOUT ME -->
+    <section class="about-section">
+        <div class="about-container">
+            <h2 class="about-title">About Me</h2>
+            <div class="about-title-line"></div>
+            <div class="about-statement">
+                “我相信，好的时尚内容不仅是视觉表达，更是品牌、文化与消费者之间的沟通方式。多元的实践经历培养了我兼具趋势洞察、内容策划、品牌叙事与项目统筹的能力。习惯以研究支撑创意，以故事传递品牌价值，关注可持续时尚、文化表达及生活方式内容，期待探索具有审美温度与商业价值的内容表达。”
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2.5: EDUCATION BACKGROUND -->
+    <section class="edu-section">
+        <div class="section-header">Academic Foundation / 教育背景</div>
+        <div class="edu-grid">
+            <div class="edu-card">
+                <h3 class="edu-school">香港理工大学</h3>
+                <div class="edu-degree">全球时尚管理 · 硕士</div>
+                <div class="edu-time">2026.08 - 2027.07 | 中国·香港</div>
+                <div class="line-divider"></div>
+                <div class="edu-courses-title">Core Issues / 主修课程</div>
+                <p class="edu-courses">国际时尚商业的当代议题、时尚创业与组织行为学、全球时尚战略管理、数字化颠覆与时尚创新管理、时尚与消费文化、高级纺织材料与技术、企业社会责任与可持续发展管理。</p>
+            </div>
+            <div class="edu-card">
+                <h3 class="edu-school">上海大学（UTS双学位）</h3>
+                <div class="edu-degree">管理学 · 学士</div>
+                <div class="edu-time">2021.09 - 2025.06 | 中国·上海</div>
+                <div class="line-divider"></div>
+                <div class="edu-courses-title">Selected Coursework / 核心课程</div>
+                <p class="edu-courses">全球创新与中国企业家精神 (97)、时代音画 (96)、管理技巧 (94)、艺术与审美 (93)、管理的全球环境 (91)、人力资源管理 (90)、全球运营与供应链管理 (90)、商业洞察与创新 (88)。<span style="display:block; margin-top:5px; font-weight:500;">GPA: 3.57 / 4.00 (均绩: 88.28/100)</span></p>
+                <div class="edu-honor">
+                    <strong>Honors & Awards:</strong> 上海大学“品学兼优”奖学金；优秀科研助理称号；大学生创新创业项目上海市市级立项；上海大学跨文化能力大赛二等奖；潍创坊未来合伙人路演赛三等奖。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SELECTED CURATED PROJECTS -->
+    <!-- Chapter 01 -->
+    <div class="project-chapter-title">01 / Brand Narrative & Public Relations</div>
+    <section class="chapter-pr">
+        <div class="pr-gallery">
+            <div class="gallery-img-box img-tall">
+                <img src="p5.jpg" alt="Showroom Detail Grid">
+            </div>
+            <div class="gallery-img-box img-tall">
+                <img src="p6.jpg" alt="Palavas Brand Space">
+            </div>
+            <div class="gallery-img-box img-wide">
+                <img src="p2.jpg" alt="VOGUE Vacation Landscape">
+            </div>
+        </div>
+        <div class="pr-content-sticky">
+            <div class="project-role">品牌销售助理 / 公关实习生</div>
+            <h3 class="project-company">上海时装周 FIG Showroom & 蝶亿时尚集团</h3>
+            <div class="line-divider"></div>
+            <div class="project-details">
+                <p><strong>品牌叙事输出与趋势选品：</strong>在上海时装周 FIG Showroom 期间独立接待<span class="highlight-num">7–8位</span>国内外买手。围绕品牌起源、季度主题、核心单品与工艺亮点，将产品信息转化为故事性的品牌表达。结合秀场趋势与买手画像输出搭配建议，优化 Lookbook 呈现逻辑，强化视觉叙事完整性。</p>
+                <p><strong>大型时尚活动统筹：</strong>作为艺人统筹协助 2025 VOGUE Vacation 三亚 activity 执行，独立负责<span class="highlight-num">2位</span>艺人行程统筹与现场沟通，主导<span class="highlight-num">35名</span>艺统差旅及执行流程，保障大型高端时尚活动零失误落地。</p>
+                <p><strong>传播策略与投标：</strong>支持开云集团旗下 Pomellato 品牌日常传播，主导 Pandora 品牌大使官宣数字传播，联动<span class="highlight-num">20+</span>营销号精准放大声量。深度参与巴斯夫、欧莱雅及理肤泉的品牌化战略投标项目，独立提出创意概念与视觉提案，方案内容获正式采纳。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chapter 02 (铺底突破与二八数字联动) -->
+    <section class="chapter-strategy">
+        <!-- 45% 透明度珠宝设计艺术底衬 -->
+        <div class="jewelry-bg-overlay"></div>
+        
+        <div class="strategy-grid">
+            <div class="counter-box">
+                <div class="counter-item"><span class="counter-num" id="count1">4</span><span class="counter-label">发布版行业研究</span></div>
+                <div class="counter-item"><span class="counter-num" id="count2">9</span><span class="counter-label">品牌案例研究</span></div>
+            </div>
+            <div class="strategy-text">
+                <div class="project-role" style="color: #aaa;">Strategic Consulting & Market Planning</div>
+                <h3>02 / Strategy & Trend Insight</h3>
+                <div class="line-divider" style="background-color: rgba(255,255,255,0.15)"></div>
+                <ul class="strategy-list">
+                    <li>
+                        <div class="strat-meta">北京和君咨询有限公司</div>
+                        <div class="strat-title">新消费赛道行业研究与原创内容编辑</div>
+                        <div class="strat-desc">运用市场研究框架输出多份深度行业报告，系统梳理竞争格局、增长逻辑及品牌营销策略。独立策划并撰写 10+ 篇原创行业简报，聚焦消费趋势与商业创新。</div>
+                    </li>
+                    <li>
+                        <div class="strat-meta">Charles & Keith</div>
+                        <div class="strat-title">市场创意策划实习生</div>
+                        <div class="strat-desc">敏锐捕捉年轻一代消费心智与潮流风向，紧跟市场动态与社群文化。深度参与并成功落地 4 场具有广泛影响力的校园快闪活动，实现品牌周边互动环比爆发式增长 200%。</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chapter 03 -->
+    <div class="project-chapter-title" style="padding-bottom: 0;">03 / Sustainable Fashion & Cross-border Creativity</div>
+    <section class="horizontal-scroll-container">
+        <div class="scroll-wrapper">
+            <!-- Panel 1 -->
+            <div class="panel panel-intro">
+                <div class="panel-intro-grid">
+                    <div class="panel-intro-text">
+                        <div class="project-role">Project Leader / Lead Designer</div>
+                        <h3>“旧饰不凡”可持续项目<br>& 毕业典礼视觉舞台策展</h3>
+                        <div class="line-divider"></div>
+                        <p style="color: var(--text-muted); text-align: justify;">此板块将可持续绿色环保理念与跨界艺术舞台设计融合。向右滑动屏幕，查看《玉兰清影》学位袍的先锋概念手稿，以及来自毕业典礼现场的独家跨界舞台高光。</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <p style="font-size: 0.95rem; border-left: 2px solid var(--text-dark); padding-left: 1.5rem; text-align: justify;">
+                            <strong>“旧饰不凡”项目核心成果：</strong>作为项目主导者，策划并组织开展可持续循环时尚实践，单日回收旧饰累计达 <span class="highlight-num">508件</span>，并通过巧妙的结构解构与再设计，成功将其中的 <span class="highlight-num">9%</span> 转化为全新的概念再设计原型。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Panel 2 -->
+            <div class="panel" style="background-color: #F2F1EF;">
+                <div class="panel-design-sketch">
+                    <div class="sketch-card">
+                        <div class="sketch-img-wrapper">
+                            <img src="p7.jpg" alt="玉兰清影主稿">
+                        </div>
+                        <div class="sketch-caption">《玉兰清影》主视觉概念设计</div>
+                    </div>
+                    <div class="sketch-card">
+                        <div class="sketch-img-wrapper">
+                            <img src="p8.jpg" alt="九色鹿配色稿">
+                        </div>
+                        <div class="sketch-caption">九色鹿与海派中西色彩探索</div>
+                    </div>
+                    <div class="sketch-card">
+                        <div class="sketch-img-wrapper">
+                            <img src="p9.jpg" alt="版型调校细节">
+                        </div>
+                        <div class="sketch-caption">传统中国“忍冬纹”图解工艺</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Panel 3 -->
+            <div class="panel" style="background-color: var(--bg-color);">
+                <div class="panel-uts">
+                    <div class="stage-img-wrapper" style="aspect-ratio: 16/11; max-height: 70vh;">
+                        <img src="p1.jpg" alt="Graduation Highlight">
+                    </div>
+                    <div class="stage-text">
+                        <h4>学位袍设计灵感</h4>
+                        <div class="line-divider"></div>
+                        <p style="color: var(--text-muted); text-align: justify; font-size: 0.95rem;">负责上海大学悉尼工商学院毕业典礼的学位袍方案设计。型制突破传统，融合中式云肩与玉兰花灵感，修饰传统版型。最终因学院预算削减遗憾未能实现落地，艺术手稿荣获学院领导高度嘉奖。</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Panel 4 -->
+            <div class="panel" style="background-color: #E6EAF0;">
+                <div class="panel-stage">
+                    <div class="stage-text">
+                        <h4>跨界能力突破</h4>
+                        <div class="line-divider"></div>
+                        <p style="color: #444; text-align: justify; font-size: 0.95rem;">主导毕业典礼歌曲串烧舞台策划，统筹舞美及现场呈现。在出差期间临时受邀参与毕业原创歌曲录制，面对零原创录制经验及紧张的排期，依靠极强的自主研究与高效练习，在短时间内完成歌曲高水准学习并最终主导作品高音部分的演唱录制。</p>
+                    </div>
+                    <div class="stage-img-wrapper" style="aspect-ratio: 4/3; max-height: 70vh; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+                        <img src="p4.jpg" alt="Stage Bubble Microphone">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3.5: CREATIVE TOOLBOX -->
+    <section class="toolbox-section">
+        <div class="section-header">Creative Toolbox / 技能矩阵</div>
+        <div class="toolbox-grid">
+            <span class="tool-tag">MS Office (Word, PowerPoint, Excel)</span>
+            <span class="tool-tag">Python</span>
+            <span class="tool-tag">Procreate</span>
+            <span class="tool-tag">剪映</span>
+            <span class="tool-tag">Figma</span>
+            <span class="tool-tag">Canva</span>
+            <span class="tool-tag">English (IELTS 6.5 / GRE 320)</span>
+            <span class="tool-tag">Cantonese (Basic)</span>
+        </div>
+    </section>
+
+    <!-- SECTION 4: HUMAN-CENTRIC FOOTPRINTS -->
+    <section class="human-section">
+        <div class="human-quote">“以文字传递情感价值，以内容承载人文关怀。”</div>
+        <div class="human-grid">
+            <div class="human-card">
+                <h3>童年一课助学发展中心</h3>
+                <div class="human-meta">线上支教志愿者 | 累计服务 57+ 小时</div>
+                <p style="color: var(--text-muted); text-align: justify; font-size: 0.95rem;">深耕中国传统文化，自主设计创新趣味教学大纲。通过高效的师生内容共创模式极大提升了线上课堂的参与度，用数字媒介打破地域限制传递文化之美。</p>
+            </div>
+            <div class="human-card">
+                <h3>蓝信封留守儿童关爱中心</h3>
+                <div class="human-meta">书信志愿者 | 累计服务 12+ 小时</div>
+                <p style="color: var(--text-muted); text-align: justify; font-size: 0.95rem;">持续与偏远地区留守儿童开展长期的手写书信交流，用细腻纯粹的文字跨越空间建立长期的陪伴关系，修炼以极具温度的高品质内容输出情感价值的能力。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: CONNECT -->
+    <footer class="connect-section">
+        <div class="connect-huge-group">
+            <div class="connect-main-zh">让我们共同执笔，共创下一段具有先锋色彩与审美温度的品牌故事。</div>
+            <div class="connect-sub-en">Let's draft the next brand story together.</div>
+        </div>
+        <div class="connect-links">
+            <div class="connect-item">
+                <span class="connect-label">Direct Mail</span>
+                <a href="mailto:fan_44777@163.com" class="connect-anchor">fan_44777@163.com</a>
+            </div>
+            <div class="connect-item">
+                <span class="connect-label">Call Shiloh</span>
+                <a href="tel:+8615687704816" class="connect-anchor">+86 156-8770-4816</a>
+            </div>
+            <div class="connect-item">
+                <span class="connect-label">Current Location</span>
+                <span class="connect-anchor" style="cursor: default; pointer-events: none;">Shanghai / Hong Kong</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTION SCRIPTS -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Hero 入场动画
+        window.addEventListener('load', () => {
+            gsap.to('.hero-img-wrapper', {
+                clipPath: 'inset(0% 0 0 0)',
+                duration: 1.6,
+                ease: 'power4.inOut',
+                delay: 0.2
+            });
+            gsap.from('.hero-title, .hero-manifesto, .tag-item', {
+                opacity: 0,
+                y: 30,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: 'power3.out'
+            });
+        });
+
+        // 2. About Me 整体雾化渐显
+        gsap.to('.about-container', {
+            scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top 75%',
+                end: 'center 45%',
+                scrub: 1,
+            },
+            opacity: 1,
+            filter: 'blur(0px)',
+            ease: 'none'
+        });
+
+        // 3. 教育背景卡片滑动淡入
+        gsap.to('.edu-card', {
+            scrollTrigger: {
+                trigger: '.edu-section',
+                start: 'top 75%',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out'
+        });
+
+        // 二八法则核心：时尚图像“视窗滚动浸润去色”
+        gsap.utils.toArray('.hero-img-wrapper img, .gallery-img-box img').forEach(img => {
+            gsap.to(img, {
+                scrollTrigger: {
+                    trigger: img,
+                    start: "top 85%", 
+                    end: "top 35%",   
+                    scrub: true
+                },
+                filter: "grayscale(0%)", 
+            });
+        });
+
+        // 4. Chapter 02 数据增加动画
+        ScrollTrigger.create({
+            trigger: '.chapter-strategy',
+            start: 'top 70%',
+            onEnter: () => {
+                animateCounter('count1', 0, 4, 1200);
+                animateCounter('count2', 0, 9, 1200);
+            }
+        });
+
+        function animateCounter(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let current = start;
+            let range = end - start;
+            let increment = end > start ? 1 : -1;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let timer = setInterval(function() {
+                current += increment;
+                obj.textContent = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // 5. Chapter 03 锁屏横向大长卷控制
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 993px)", () => {
+            gsap.to(".scroll-wrapper", {
+                xPercent: -75,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".horizontal-scroll-container",
+                    pin: true,
+                    scrub: 1,
+                    start: "top top",
+                    end: "+=3200", 
+                }
+            });
+        });
+
+        // 二八法则核心：最后一页电影感“字雾淡入”
+        gsap.to('.connect-main-zh, .connect-sub-en', {
+            scrollTrigger: {
+                trigger: '.connect-huge-group',
+                start: 'top 80%',
+            },
+            opacity: 1,
+            filter: 'blur(0px)',
+            y: 0,
+            duration: 1.5,
+            stagger: 0.3, 
+            ease: 'power3.out'
+        });
+
+        // 6. 技能标签磁性交互
+        const toolTags = document.querySelectorAll('.tool-tag');
+        toolTags.forEach(tag => {
+            tag.addEventListener('mousemove', (e) => {
+                const rect = tag.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width/2;
+                const y = e.clientY - rect.top - rect.height/2;
+                
+                gsap.to(tag, {
+                    x: x * 0.35,
+                    y: y * 0.35,
+                    borderColor: '#3A6082',
+                    color: '#3A6082',
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+
+            tag.addEventListener('mouseleave', () => {
+                gsap.to(tag, {
+                    x: 0,
+                    y: 0,
+                    borderColor: 'rgba(12, 12, 12, 0.15)',
+                    color: '#121212',
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
